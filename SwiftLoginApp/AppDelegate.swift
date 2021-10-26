@@ -3,7 +3,7 @@
 //  SwiftLoginApp
 //
 //  Created by Natsumo Ikeda on 2016/05/26.
-//  Copyright 2017 FUJITSU CLOUD TECHNOLOGIES LIMITED All Rights Reserved.
+//  Copyright 2019 FUJITSU CLOUD TECHNOLOGIES LIMITED All Rights Reserved.
 //
 
 import UIKit
@@ -17,10 +17,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let applicationkey = "YOUR_NCMB_APPLICATION_KEY"
     let clientkey      = "YOUR_NCMB_CLIENT_KEY"
 
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         // Override point for customization after application launch.
         //********** SDKの初期化 **********
-        NCMB.setApplicationKey(applicationkey, clientKey: clientkey)
+        NCMB.initialize(applicationKey: applicationkey, clientKey: clientkey)
+       
         return true
     }
 
