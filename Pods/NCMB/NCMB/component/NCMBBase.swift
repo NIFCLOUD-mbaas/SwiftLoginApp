@@ -1,5 +1,5 @@
 /*
- Copyright 2019 FUJITSU CLOUD TECHNOLOGIES LIMITED All Rights Reserved.
+ Copyright 2019-2023 FUJITSU CLOUD TECHNOLOGIES LIMITED All Rights Reserved.
  
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -182,6 +182,21 @@ public class NCMBBase : CustomStringConvertible {
     func toJson() throws -> Data? {
         do {
             return try NCMBJsonConverter.convertToJson(self._fields)
+        } catch {
+            throw NCMBInvalidRequestError.invalidBodyJsonValue
+        }
+    }
+
+    /// 登録対象フィールドの内容をJson形式にして返します。
+    ///
+    /// - Returns: 登録フィールド対象内容のJson。
+    func getPostFieldsToJson() throws -> Data? {
+        var fields: [String : Any] = self._fields
+        fields[NCMBBase.FIELDNAME_OBJECTID] = nil
+        fields[NCMBBase.FIELDNAME_CREATEDATE] = nil
+        fields[NCMBBase.FIELDNAME_UPDATEDATE] = nil
+        do {
+            return try NCMBJsonConverter.convertToJson(fields)
         } catch {
             throw NCMBInvalidRequestError.invalidBodyJsonValue
         }

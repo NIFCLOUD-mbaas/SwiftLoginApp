@@ -1,5 +1,5 @@
 /*
- Copyright 2019 FUJITSU CLOUD TECHNOLOGIES LIMITED All Rights Reserved.
+ Copyright 2019-2023 FUJITSU CLOUD TECHNOLOGIES LIMITED All Rights Reserved.
  
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -15,6 +15,9 @@
  */
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 struct NCMBRequest {
 
@@ -159,6 +162,8 @@ struct NCMBRequest {
         if let urlComponents : URLComponents = URLComponents(url: url, resolvingAgainstBaseURL: true) {
             var urlComponents = urlComponents
             urlComponents.queryItems = getSortedQueryItems()
+            // percent-encoded for '+' char.
+            urlComponents.percentEncodedQuery = urlComponents.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
             if let urlWithQuery = urlComponents.url {
                 return urlWithQuery
             } else {

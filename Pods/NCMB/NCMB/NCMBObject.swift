@@ -1,5 +1,5 @@
 /*
- Copyright 2019 FUJITSU CLOUD TECHNOLOGIES LIMITED All Rights Reserved.
+ Copyright 2019-2023 FUJITSU CLOUD TECHNOLOGIES LIMITED All Rights Reserved.
  
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -97,6 +97,21 @@ public class NCMBObject : NCMBBase {
                     break
             }
         })
+    }
+    
+    /// - Returns: リクエストが成功した場合は `.success` 、 失敗した場合は `.failure<Error>`
+    public func saveInBackground_async() async -> NCMBResult<Void> {
+        return await withCheckedContinuation { continuation in
+            NCMBObjectService().save(object: self, callback: {(result: NCMBResult<NCMBResponse>) -> Void in
+                switch result {
+                case let .success(response):
+                    self.reflectResponse(response: response)
+                    continuation.resume(returning: NCMBResult<Void>.success(()))
+                case let .failure(error):
+                    continuation.resume(returning: NCMBResult<Void>.failure((error)))
+                }
+            })
+        }
     }
 
     /// 設定されたオブジェクトIDに対応するオブジェクトを同期処理にて削除します。
